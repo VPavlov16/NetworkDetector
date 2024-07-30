@@ -9,33 +9,34 @@ byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 byte ip[] = {192, 168, 0, 8};
 
 // IP addresses to ping
+//change the ip's with the desired ip you want to ping (currently using 2, edit it if you want to use 1)
 IPAddress pingAddr1(8, 8, 8, 8);
-IPAddress pingAddr2(109, 121, 153, 1);
+IPAddress pingAddr2(8, 8, 8, 8);
 
 SOCKET pingSocket = 0;
 EthernetICMPPing ping(pingSocket, (uint16_t)random(0, 255));
 char buffer[256];
 
-//relay smetservice
+//relay pingAddr1
 const int relay1Pin1 = 7; 
 const int relay1Pin2 = 6;
 const int relay1Pin3 = 5;
 
-//relay flynet
-const int relay2Pin1 = 8; // Relay pin for 109.121.153.1
-const int relay2Pin2 = 9; // Relay pin for 109.121.153.1
-const int relay2Pin3 = 10; // Relay pin for 109.121.153.1
+//relay pingAddr2
+const int relay2Pin1 = 8; 
+const int relay2Pin2 = 9; 
+const int relay2Pin3 = 10; 
 
 int failCount1 = 0;
 int failCount2 = 0;
 
 void setup() {
   // Initialize relay pins
-  //smet
+  //pingAddr1
   pinMode(relay1Pin1, OUTPUT);
   pinMode(relay1Pin2, OUTPUT);
   pinMode(relay1Pin3, OUTPUT);
-  //fly
+  //pingAddr2
   pinMode(relay2Pin1, OUTPUT);
   pinMode(relay2Pin2, OUTPUT);
   pinMode(relay2Pin3, OUTPUT);
@@ -47,8 +48,7 @@ void setup() {
 }
 
 void loop() {
-  //smet
-  // Ping 8.8.8.8
+  //pingAddr1
   Serial.print("Pinging ");
   Serial.print(pingAddr1);
   Serial.print("...");
@@ -73,7 +73,7 @@ void loop() {
   Serial.println(buffer);
 
   if (failCount1 >= 3) {
-    //smet
+    //pingAddr1
     digitalWrite(relay1Pin1, HIGH);
     digitalWrite(relay1Pin2, HIGH);
     digitalWrite(relay1Pin3, HIGH); // Activate relay on fail
@@ -87,8 +87,7 @@ void loop() {
   // Wait 5 seconds between pings
   delay(5000);
 
-//fly
-  // Ping 109.121.153.1
+  //pingAddr2
   Serial.print("Pinging ");
   Serial.print(pingAddr2);
   Serial.print("...");
